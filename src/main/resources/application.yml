@@ -1,0 +1,9 @@
+zuul:
+    prefix: /webkoding/
+    routes:
+        customers:
+            path: /customers/**
+            service-id: wbkdng-customers
+        audit:
+            path: /audit/**
+            service-id: wbkdng-audit
