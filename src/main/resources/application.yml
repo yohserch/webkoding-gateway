@@ -1,9 +1,38 @@
-zuul:
-    prefix: /webkoding/
-    routes:
-        customers:
-            path: /customers/**
-            service-id: wbkdng-customers
-        audit:
-            path: /audit/**
-            service-id: wbkdng-audit
+server:
+  port: 9000
+  servlet:
+    context-path: /
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:9001/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, gateway
+  info:
+    git:
+      enabled: true
+      mode: full
+
+spring:
+  application:
+    name: wbkdng-gateway
+  cloud:
+    gateway:
+      routes:
+          - id: wbkdng-customers
+            uri: lb://wbkdng-customers
+            predicates:
+                - Path=/customers/**
+          - id: wbkding-audit
+            uri: lb://wbkdng-audit
+            predicates:
+                - Path=/audit/**
+      default-filters:
+          - PrefixPath=/webkoding
+          - StripPrefix=2
+          - LogRequestInfoFilter
